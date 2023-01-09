@@ -7,7 +7,7 @@ a simple jit compiler for brainf*ck esoteric programming language using c++ and 
 
 ![Alt-Text](https://i.imgur.com/5sfewls.png)
 
-# Requirments
+# Requirements
 - CMake
 - C++ Compiler (clang/msvc/gnu)
 
