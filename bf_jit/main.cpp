@@ -10,7 +10,6 @@
 #include <unordered_map>
 #include <vector>
 
-
 namespace io {
 std::string read_file(const std::string &file_name) {
   std::ifstream file(file_name);
@@ -102,9 +101,14 @@ public:
         break;
       }
       case ops_t::end: {
-        compiler.jmp(m_loops.back().start);
-        compiler.bind(m_loops.back().end);
-        m_loops.pop_back();
+        if (!m_loops.empty()) {
+          compiler.jmp(m_loops.back().start);
+          compiler.bind(m_loops.back().end);
+          m_loops.pop_back();
+        } else {
+          std::cerr << "Error: Unmatched ']' found in the code." << std::endl;
+          return false;
+        }
         break;
       }
       }
@@ -177,16 +181,8 @@ private:
 } // namespace jit
 
 int main() {
-  std::string code = R"(
->>,[>>,]<<[
-    [<<]>>>>[
-        <<[>+<<+>-]
-        >>[>+<<<<[->]>[<]>>-]
-        <<<[[-]>>[>+<-]>>[<<<+>>>-]]
-        >>[[<+>-]>>]<
-    ]<<[>>+<<-]<<
-]>>>>[.>>]
-)";
+  //reads from stdin and prints to stdout
+  std::string code = R"(,----------[++++++++++>,----------]<[<]>[.>])";
 
   jit::c_bf_jit jit(code);
   if (!jit.compile_jit()) {
